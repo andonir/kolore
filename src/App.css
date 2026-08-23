@@ -131,7 +131,7 @@ header {
 }
 
 .home .clothes-container .items .container-item {
-  width: 200px;
+  width: 170px;
   height: 260px;
   display: flex;
   flex-direction: column;
@@ -167,10 +167,11 @@ header {
   margin-top: 5px;
 }
 .home .clothes-container .items .item-bottom .size button{
-  padding: 5px 15px;
+  padding: 5px 10px;
   background-color: var(--background-color);
   border: 1px solid var(--primary-color);
   border-radius: 8px;
+  color: var(--text-color);
 }
 .home .clothes-container .items .item-bottom .size .selected-size{
   background-color: var(--border-color);
@@ -316,6 +317,17 @@ footer h4 {
 }
 /* Responsive */
 
+ @media (min-width: 700px) {
+
+  /* Clothes container */
+  .home .clothes-container .items .container-item{
+    width: 200px;
+  }
+
+  .home .clothes-container .items .item-bottom .size button{
+    padding: 5px 15px;
+  }
+}
 @media (min-width: 1000px) {
   /* Hero */
   .home .hero .hero-background {
