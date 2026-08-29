@@ -1,16 +1,16 @@
 import { useState, useContext } from "react";
-import ContainerItem from "./ContainerItem";
+import DrawingItem from "./DrawingItem";
 import { FaShoppingCart } from "react-icons/fa";
-import { Context } from "../../Context/Context";
+import { Context } from "../../../Context/Context";
 import Cart from "./Cart";
-const ClothesContainer = () => {
+const DrawingsContainer = () => {
   const { cartList,showCart, setShowCart, products } = useContext(Context);
   const [selected, setSelected] = useState("shirts");
   return (
-    <section className="clothes-container">
+    <section className="drawings-container">
       <Cart></Cart>
       <div className="container-top">
-        <div className="clothes-selector">
+        {/* <div className="clothes-selector">
           <button
             className={selected === "shirts" ? "shirts selected" : "shirts"}
             onClick={() => setSelected("shirts")}
@@ -25,7 +25,7 @@ const ClothesContainer = () => {
           >
             Jertseak
           </button>
-        </div>
+        </div> */}
         <div className="shopping-cart">
           <FaShoppingCart
             className="cart-icon"
@@ -34,17 +34,15 @@ const ClothesContainer = () => {
           {cartList.length> 0 && <span className="cart-list">{  cartList.length}</span>}
         </div>
       </div>
-      <div className="items">
-        {products[selected].map((product, i) => {
+      <div className="drawings">
+        {products["drawings"].map((product, i) => {
           return (
-            <ContainerItem
+            <DrawingItem
               key={i}
-              type={product.type}
               id={product.id}
-              price={product.price}
               name={product.name}
               img={product.img}
-            ></ContainerItem>
+            ></DrawingItem>
           );
         })}
       </div>
@@ -52,4 +50,4 @@ const ClothesContainer = () => {
   );
 };
 
-export default ClothesContainer;
+export default DrawingsContainer;

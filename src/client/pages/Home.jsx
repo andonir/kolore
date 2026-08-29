@@ -1,6 +1,5 @@
-import camiseta1 from "../assets/camiseta1.png";
-import portada from "../assets/portada.png";
-import ClothesContainer from "../components/home/ClothesContainer";
+import portada from "../../assets/portada.png"
+import DrawingsContainer from "../components/home/DrawingsContainer";
 import Cart from "../components/home/Cart";
 const Home = () => {
   return (
@@ -15,7 +14,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    <ClothesContainer></ClothesContainer>
+    <DrawingsContainer></DrawingsContainer>
       
     </main>
   );

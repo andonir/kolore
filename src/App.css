@@ -48,79 +48,77 @@ header {
   background-color: var(--primary-dark-color);
 } */
 
-/* Clothes Container */
-.home .clothes-container {
+/* drawings container */
+.home .drawings-container {
   position: relative;
 }
-.home .clothes-container .container-top {
+.home .drawings-container .container-top {
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   margin: 0 20px;
 }
-.home .clothes-container .container-top .shopping-cart{
+.home .drawings-container .container-top .shopping-cart {
   display: flex;
   align-items: baseline;
   gap: 2px;
 }
-.home .clothes-container .container-top .cart-icon {
+.home .drawings-container .container-top .cart-icon {
   font-size: 20px;
   color: var(--primary-color);
   transition: color 0.3s;
 }
-.home .clothes-container .container-top .cart-icon:hover {
+.home .drawings-container .container-top .cart-icon:hover {
   color: var(--primary-dark-color);
   cursor: pointer;
 }
-.home .clothes-container .container-top .shopping-cart .cart-list{
- background-color: red;
- color: var(--background-color);
- border-radius: 100%;
- display: flex;
- align-items: center;
- justify-content: center;
+.home .drawings-container .container-top .shopping-cart .cart-list {
+  background-color: red;
+  color: var(--background-color);
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 15px;
   font-weight: 700;
   width: 20px;
   height: 20px;
   line-height: 1;
-
 }
-.home .clothes-container .clothes-selector {
+.home .drawings-container .clothes-selector {
   display: flex;
   gap: 20px;
 }
-.home .clothes-container .clothes-selector button {
+.home .drawings-container .clothes-selector button {
   border: none;
   font-size: 18px;
   background-color: transparent;
   color: var(--text-color);
 }
-.home .clothes-container .clothes-selector .selected {
+.home .drawings-container .clothes-selector .selected {
   border-bottom: 3px solid var(--primary-color);
 }
-.home .clothes-container button:hover{
-    cursor: pointer;
+.home .drawings-container button:hover {
+  cursor: pointer;
 }
-.home .clothes-container .container-item .add-to-cart, .home .clothes-container .cart .buy{
-    border-radius: 8px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-    background-color: var(--primary-color);
+.home .drawings-container .drawing-item .add-to-cart,
+.home .drawings-container .cart .buy {
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  background-color: var(--primary-color);
   border: none;
   font-size: 15px;
   padding: 10px;
   color: var(--button-text-color);
   transition: background-color 0.3s;
-
-
 }
-.home .clothes-container .container-item .add-to-cart:hover, .home .clothes-container .cart .buy:hover {
-    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.15);
-    background-color: var(--primary-dark-color);
+.home .drawings-container .drawing-item .add-to-cart:hover,
+.home .drawings-container .cart .buy:hover {
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.15);
+  background-color: var(--primary-dark-color);
 }
 
-
-.home .clothes-container .items {
+.home .drawings-container .drawings {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -130,64 +128,98 @@ header {
   justify-content: center;
 }
 
-.home .clothes-container .items .container-item {
-  width: 170px;
-  height: 260px;
+.home .drawings-container .drawings .drawing-item {
+  width: 140px;
+  height: 170px;
   display: flex;
   flex-direction: column;
   gap: 5px;
   overflow: hidden;
-  transition: height .3s;
-
+  transition: height 0.3s;
 }
-.home .clothes-container .items .selected-item{
-  height: 350px
+.home .drawings-container .drawings .selected-item {
+  height: var(--height);
 }
-.home .clothes-container .items .container-item:hover{
-  cursor:pointer;
+.home .drawings-container .drawings .drawing-item:hover {
+  cursor: pointer;
 }
-.home .clothes-container .items .container-item img {
-  height: 200px;
+.home .drawings-container .drawings .drawing-item img {
+  height: 140px;
   object-fit: cover;
-  flex: 0 0 200px;
-
+  flex: 0 0 140px;
 }
-.home .clothes-container .items .container-item h2{
+.home .drawings-container .drawings .drawing-item h2 {
   font-size: 20px;
 }
-.home .clothes-container .items .item-bottom{
+.home .drawings-container .drawings .item-bottom {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
-.home .clothes-container .items .item-bottom .size{
+.home .drawings-container .drawings .item-bottom select {
+  border: 1px solid var(--primary-color);
+  padding: 5px;
+  border-radius: 5px;
+  width: 100%;
+  text-align: left;
+  outline: none;
+}
+.home .drawings-container .drawings .item-bottom select:hover {
+  cursor: pointer;
+}
+.home .drawings-container .drawings .item-bottom .color,
+.home .drawings-container .drawings .item-bottom .size {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 5px;
 }
-.home .clothes-container .items .item-bottom .size button{
+.home .drawings-container .drawings .item-bottom .color {
+  width: 90%;
+  margin: 5px auto 0 auto;
+}
+.home .drawings-container .drawings .item-bottom .color button {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 100%;
+}
+.home .drawings-container .drawings .item-bottom .color .selected-color {
+  border: 3px solid var(--primary-color);
+}
+.home .drawings-container .drawings .item-bottom .color .red {
+  background-color: rgb(189, 70, 70);
+}
+.home .drawings-container .drawings .item-bottom .color .green {
+  background-color: rgb(43, 139, 43);
+}
+.home .drawings-container .drawings .item-bottom .color .blue {
+  background-color: rgb(69, 69, 196);
+}
+.home .drawings-container .drawings .item-bottom .color .yellow {
+  background-color: rgb(191, 199, 76);
+}
+
+.home .drawings-container .drawings .item-bottom .size button {
   padding: 5px 10px;
   background-color: var(--background-color);
   border: 1px solid var(--primary-color);
   border-radius: 8px;
   color: var(--text-color);
 }
-.home .clothes-container .items .item-bottom .size .selected-size{
+.home .drawings-container .drawings .item-bottom .size .selected-size {
   background-color: var(--border-color);
 }
-.home .clothes-container .items .container-item .add-to-cart{
+.home .drawings-container .drawings .drawing-item .add-to-cart {
   margin-top: 5px;
 }
-
-
 
 /* Cart */
 .cart {
   display: flex;
   flex-direction: column;
   background-color: var(--background-color);
-  width: 300px;
+  width: 400px;
   position: absolute;
   top: -25px;
   right: 0;
@@ -197,13 +229,12 @@ header {
   gap: 40px;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform .3s;
+  transition: transform 0.3s;
 }
-.home .clothes-container .show {
+.home .drawings-container .show {
   display: flex;
   flex-direction: column;
-    transform: scaleX(1);
-
+  transform: scaleX(1);
 }
 .cart .cart-top {
   display: flex;
@@ -215,46 +246,73 @@ header {
 .cart .cart-top .close-icon {
   font-size: 20px;
   color: var(--primary-color);
-  transition: color .3s;
+  transition: color 0.3s;
 }
 .cart .cart-top .close-icon:hover {
   cursor: pointer;
   color: var(--primary-dark-color);
-
 }
 
-.cart .cart-container{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.cart .cart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-.cart .cart-container .cart-item{
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: space-between;
+.cart .cart-container .cart-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
 }
-.cart .cart-container .cart-item img{
+.cart-item img {
+  width: 50px;
+}
+.cart-item h3 {
+  font-weight: 400;
+  width: 100px;
+}
+.cart-item .type{
+    width: 80px;
+}
+.cart-item .size{
+    width: 30px;
+}
+.cart-item .color{
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+}
+.cart-item .price{
     width: 50px;
 }
-.cart .cart-container .cart-item h3{
-  font-weight: 400;
-}
-.cart .cart-container .cart-item .delete-icon{
-    font-size: 20px;
-    color: var(--primary-color);
-    transition: color .3s;
-}
-.cart .cart-container .cart-item .delete-icon:hover{
-    cursor: pointer;
-    color: var(--primary-dark-color);
-}
-.cart .buy{
-    border: none;
-    background-color: var(--primary-color);
-    color: var(--button-text-color);
-    padding: 5px;
 
+.cart-item .color.red{
+    background-color: rgb(189, 70, 70);
+}
+.cart-item .color.green{
+  background-color: rgb(43, 139, 43);
+}
+.cart-item .color.blue{
+  background-color: rgb(69, 69, 196);
+}
+.cart-item .color.yellow{
+  background-color: rgb(191, 199, 76);
+}
+.cart .cart-container .cart-item .delete-icon {
+  font-size: 20px;
+  color: var(--primary-color);
+  transition: color 0.3s;
+}
+.cart .cart-container .cart-item .delete-icon:hover {
+  cursor: pointer;
+  color: var(--primary-dark-color);
+}
+.cart .buy {
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  padding: 5px;
 }
 /* Footer */
 footer {
@@ -317,15 +375,23 @@ footer h4 {
 }
 /* Responsive */
 
- @media (min-width: 700px) {
-
-  /* Clothes container */
-  .home .clothes-container .items .container-item{
+@media (min-width: 700px) {
+  /* drawings container */
+  .home .drawings-container .drawings .drawing-item {
     width: 200px;
+    height: 230px;
   }
-
-  .home .clothes-container .items .item-bottom .size button{
+  .home .drawings-container .drawings .selected-item {
+    height: var(--height);
+  }
+  .home .drawings-container .drawings .item-bottom .size button {
     padding: 5px 15px;
+  }
+  .home .drawings-container .drawings .drawing-item img {
+    object-fit: cover;
+    height: 200px;
+
+    flex: 0 0 200px;
   }
 }
 @media (min-width: 1000px) {
@@ -343,20 +409,29 @@ footer h4 {
     font-size: 25px;
   }
 
-  /* Clothes container */
-  .home .clothes-container .container-top{
+  /* drawings container */
+  .home .drawings-container .container-top {
     margin: 0 100px;
-  } 
-    .home .clothes-container .container-top .cart-icon{
+  }
+  .home .drawings-container .container-top .cart-icon {
     font-size: 25px;
-  } 
-  .home .clothes-container .clothes-selector button {
+  }
+  .home .drawings-container .clothes-selector button {
     font-size: 20px;
   }
-  .home .clothes-container .items .container-item {
+  .home .drawings-container .drawings .drawing-item {
     width: 300px;
+    height: 280px;
   }
-  .home .clothes-container .cart{
+  .home .drawings-container .drawings .selected-item {
+    height: var(--height);
+  }
+  .home .drawings-container .drawings .drawing-item img {
+    object-fit: cover;
+
+    flex: 0 0 250px;
+  }
+  .home .drawings-container .cart {
     width: 500px;
   }
 }
