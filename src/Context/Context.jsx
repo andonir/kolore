@@ -105,6 +105,29 @@ export const ContextProvider = (props) => {
   const [cartList, setCartList] = useState([]);
   const [totalPrice, setTotalPrice] = useState(null);
 
+const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 1. Check session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
+
+    // 2. Listen to changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    // 3. Clean
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   return (
     <Context.Provider
       value={{
@@ -115,6 +138,7 @@ export const ContextProvider = (props) => {
         products,
         totalPrice,
         setTotalPrice,
+        session, loading
       }}
     >
       {props.children}

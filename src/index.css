@@ -55,6 +55,9 @@ button {
   font-family: inherit;
   font-weight: 500;
 }
+input{
+  font-family: inherit;
+}
 
 section{
     margin-bottom: 20px;

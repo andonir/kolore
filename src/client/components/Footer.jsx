@@ -6,7 +6,7 @@ const Footer = () => {
           <img src="/img/logo.png" alt="Logo-footer" />
         </div> */}
 
-      <div class="contact">
+      <div className="contact">
         <a href="https://www.instagram.com/_kolore_/" target="_blank" rel="noopener noreferrer">
           <FaInstagram className="instagram-icon icon-contact" />
         </a>

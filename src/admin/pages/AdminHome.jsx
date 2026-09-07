@@ -1,5 +1,6 @@
 const AdminHome = ()=>{
-    return <h1>Admin homee</h1>
+    return <main classname="login">
+    </main>
 }
 
 export default AdminHome

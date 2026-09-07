@@ -373,6 +373,53 @@ footer h4 {
   color: var(--primary-color);
   font-weight: 500;
 }
+
+
+
+/* ADMIN */
+
+/* Login */
+
+.login{
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: 50px;
+  padding: 20px 0;
+}
+.login-form{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.login-form input{
+  padding: 5px;
+  border: none;
+  border-bottom: 2px solid var(--primary-color);
+  outline: none;
+  background-color: var(--background-color);
+  font-size: 15px;
+}
+
+.login-form input:focus{
+  padding: 15px 5px;
+  border-bottom: 2px solid var(--primary-dark-color);
+}
+
+.login-form button{
+  background-color: var(--primary-color);
+  border: none;
+  padding: 10px;
+  color: var(--button-text-color);
+  font-size: 17px;
+  transition: background-color .3s;
+}
+
+.login-form button:hover{
+  cursor: pointer;
+  background-color: var(--primary-dark-color);
+}
 /* Responsive */
 
 @media (min-width: 700px) {
