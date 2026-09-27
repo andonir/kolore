@@ -444,11 +444,12 @@ footer h4 {
   cursor: pointer;
 }
 /* ADD DRAWING */
-.admin-home .add-drawing{
+.admin-home .add-drawing, .admin-home .add-product{
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
+  margin-top: 20px;
 }
 .admin-home form{
   display: flex;
@@ -505,11 +506,47 @@ footer h4 {
   align-items: center;
 }
 
-.add-drawing .checkbox-container .checkboxes .checkbox .color-div{
-  background-color: red;
+.admin-home .color-div{
   width: 20px;
   height: 20px;
   border-radius: 50%;
+}
+
+/* Add product */
+
+.add-product .property{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.add-product input{
+  padding: 5px 10px;
+  outline: none;
+}
+.add-product button{
+  padding: 5px 10px;
+}
+.add-product .property .property-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.add-product .property .property-container .property-item-display{
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 120px;
+  
+}
+
+.add-product .property-container .add-property-item{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 /* Responsive */
 

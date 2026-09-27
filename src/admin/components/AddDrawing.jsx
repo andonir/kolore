@@ -31,10 +31,10 @@ const AddDrawing = () => {
             
                 {/* Products */}
                 <CheckBox type={'products'} typeList={products}  selectedType={selectedProducts} setSelectedType={setSelectedProducts}></CheckBox>
-                <CheckBox type={'colors'} typeList={colors}  selectedType={selectedColors} setSelectedType={setSelectedColors}></CheckBox>
+                {/* <CheckBox type={'colors'} typeList={colors}  selectedType={selectedColors} setSelectedType={setSelectedColors}></CheckBox>
                 <CheckBox type={'ages'} typeList={ages} selectedType={selectedAges} setSelectedType={setSelectedAges}></CheckBox>
                 <CheckBox type={'sizes'} typeList={sizes} selectedType={selectedSizes} setSelectedType={setSelectedSizes}></CheckBox>
-                <CheckBox type={'sexes'} typeList={sexes} selectedType={selectedSexes} setSelectedType={setSelectedSexes}></CheckBox>
+                <CheckBox type={'sexes'} typeList={sexes} selectedType={selectedSexes} setSelectedType={setSelectedSexes}></CheckBox> */}
 
             <button>Add</button>
 

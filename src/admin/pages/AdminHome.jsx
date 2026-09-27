@@ -1,5 +1,6 @@
 import AddData from "../components/AddData"
 import AddDrawing from "../components/AddDrawing"
+import AddProduct from "../components/AddProduct"
 import { logOut } from "../../supabase/functions"
 const AdminHome = ()=>{
     return <main className="admin-home">
@@ -8,6 +9,7 @@ const AdminHome = ()=>{
         <button className="log-out" onClick={()=>logOut()}>CERRAR SESIÓN</button>
         </div>
         <AddDrawing></AddDrawing>
+        <AddProduct></AddProduct>
     </main>
 }
 
