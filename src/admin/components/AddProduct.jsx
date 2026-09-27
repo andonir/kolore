@@ -25,6 +25,7 @@ const AddProduct = () => {
   } = useContext(Context);
   const [colors, setColors] = useState([])
   const [ages, setAges] = useState([])
+  const [sexes, setSexes] = useState([])
   
 
   const handleSubmit = (e) => {
@@ -41,6 +42,7 @@ const AddProduct = () => {
         <input type="text" name="productType" placeholder="Nombre del producto" />
         <AddProductProperty type={'colors'} typeArr={colors} setTypeArr={setColors}/>
         <AddProductProperty type={'ages'} typeArr={ages} setTypeArr={setAges}/>
+        <AddProductProperty type={'sexes'} typeArr={sexes} setTypeArr={setSexes}/>
         <button type="submit">Añadir</button>
       </form>
       </div>
