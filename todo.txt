@@ -1,0 +1,1 @@
+Cambiar la configuracion de colors para que salte si el hex es igual

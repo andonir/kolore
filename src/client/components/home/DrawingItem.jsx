@@ -1,7 +1,7 @@
 import { Context } from "../../../Context/Context";
 import { useContext, useState, useRef, useEffect } from "react";
-const DrawingItem = ({ id, name, img }) => {
-  const { cartList, setCartList, setTotalPrice, products } =
+const DrawingItem = ({ id, name, img, products }) => {
+  const { cartList, setCartList, setTotalPrice } =
     useContext(Context);
   const [selectedItem, setSelectedItem] = useState(false);
   const [size, setSize] = useState(null);
@@ -36,7 +36,7 @@ const DrawingItem = ({ id, name, img }) => {
     }
   }, [selectedItem]);
   useEffect(()=>{
-    setPrice(products.prices[type])
+    setPrice(products?.prices?.[type])
   },[type]);
   const handleAddtoCartBtnClick = (e) => {
     e.stopPropagation();
@@ -88,9 +88,11 @@ const DrawingItem = ({ id, name, img }) => {
                 setType(e.target.value)
               }}
             >
-              <option value="shirt">Kamiseta</option>
-              <option value="sweater">Jertsea</option>
-              <option value="bag">Poltza</option>
+              {
+                products.map((product, i)=> 
+                <option key={i} value={product.name}>{product.name}</option>
+                )
+              }
             </select>
           </div>
           <div className="color">
@@ -159,7 +161,7 @@ const DrawingItem = ({ id, name, img }) => {
           )}
           {type && (
             <div className="price">
-              <p>{products.prices[type]}€</p>
+              <p>PRECIO</p>
             </div>
           )}
           <button

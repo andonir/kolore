@@ -420,6 +420,97 @@ footer h4 {
   cursor: pointer;
   background-color: var(--primary-dark-color);
 }
+
+/* home */
+.admin-home .admin-home-top{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.admin-home .admin-home-top .log-out{
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  right: 20px;
+  transition: background-color .3s;
+}
+.admin-home .admin-home-top .log-out:hover{
+  background-color: var(--primary-dark-color);
+  cursor: pointer;
+}
+/* ADD DRAWING */
+.admin-home .add-drawing{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+.admin-home form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.admin-home .add-drawing  input{
+  padding: 10px;
+}
+
+
+.admin-home .add-drawing button{
+  padding: 20px 50px;
+}
+.add-drawing form .checkbox-container .top{
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 200px;
+  margin-bottom: 10px;
+}
+.add-drawing form .checkbox-container .top .check-all{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.add-drawing form .checkbox-container h3{
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.add-drawing form .checkbox-container h3:hover{
+  cursor: pointer;
+}
+.add-drawing form .checkbox-container .expand-icon{
+  font-size: 20px;
+}
+.add-drawing .checkbox-container .checkboxes{
+  display: none;
+}
+.add-drawing .checkbox-container .open{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.add-drawing .checkbox-container .checkboxes .checkbox{
+  display: flex;
+  gap: 10px;
+  justify-content: start;
+  align-items: center;
+}
+
+.add-drawing .checkbox-container .checkboxes .checkbox .color-div{
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
 /* Responsive */
 
 @media (min-width: 700px) {

@@ -1,14 +1,17 @@
 import {useState} from 'react'
 import { logIn } from '../../supabase/functions'
+import { useContext } from 'react'
+import { Context } from '../../Context/Context'
+import { useNavigate } from 'react-router-dom'
 const AdminLogin = ()=>{
-    const [email, setEmail] = useState(null)
-    const [password, setPassword] = useState(null)
+    const {session} = useContext(Context)
+    const navigate = useNavigate()
     const handleSubmit = (e)=>{
         e.preventDefault()
-        setEmail(e.target.email.value)
-        setPassword(e.target.password.value)
-
-        console.log(logIn(e.target.email.value, e.target.password.value))
+        logIn(e.target.email.value, e.target.password.value)
+        if(session) {
+            navigate('/admin/home')
+        }
     }
     return <main className="login">
          <h2>Admin Login</h2>
