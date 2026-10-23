@@ -2,7 +2,16 @@ import { MdDelete } from "react-icons/md";
 
 import { Context } from "../../../Context/Context";
 import { useContext } from "react";
-const CartItem = ({ type, size, id, price, name, img, color }) => {
+const CartItem = ({
+  id,
+  drawingName,
+  productId,
+  productName,
+  size,
+  price,
+  img,
+  color
+}) => {
   const { cartList, setCartList, setTotalPrice } = useContext(Context);
   const handleClick = () => {
     setTotalPrice((prevPrice) => Math.round((prevPrice - price) * 100) / 100);
@@ -16,30 +25,12 @@ const CartItem = ({ type, size, id, price, name, img, color }) => {
     <>
       <div className="cart-item">
         <img src={img} alt="cart-product-img" />
-        <h3>{name}</h3>
-        <p className="type">
-          {type === "shirt"
-            ? "Kamiseta"
-            : type === "sweater"
-              ? "Jertsea"
-              : type === "bag"
-                ? "Poltza"
-                : null}
+        <h3>{drawingName}</h3>
+        <p className="product-type">
+          {productName}
         </p>
-        {type !== "bag" && <p className="size">{size}</p>}
-        <div
-          className={
-            color === "red"
-              ? "color red"
-              : color === "green"
-                ? "color green"
-                : color === "blue"
-                  ? "color blue"
-                  : color === "yellow"
-                    ? "color yellow"
-                    : "color"
-          }
-        ></div>
+        <p className="size">{size.name}</p>
+        <span className="color" style={{backgroundColor: color.hex}}></span>
         <p className="price">{price}€</p>
 
         <MdDelete

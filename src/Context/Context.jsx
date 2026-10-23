@@ -115,6 +115,7 @@ const [selectedColors, setSelectedColors] = useState([])
 const [selectedAges, setSelectedAges] = useState([])
 const [selectedSizes, setSelectedSizes] = useState([])
 const [selectedSexes, setSelectedSexes] = useState([])
+const [selectedDPColors, setSelectedDPColors] = useState([])
 useEffect(() => {
 
     // 1. Check session
@@ -151,8 +152,8 @@ useEffect(() => {
         session, loading,
         selectedProducts,
         setSelectedProducts,
-        selectedColors, 
-        setSelectedColors,
+        selectedDPColors, 
+        setSelectedDPColors,
         selectedAges,
         setSelectedAges,
         selectedSizes,

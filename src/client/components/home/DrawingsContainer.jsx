@@ -5,7 +5,6 @@ import { Context } from "../../../Context/Context";
 import Cart from "./Cart";
 const DrawingsContainer = () => {
   const { cartList,showCart, setShowCart, products, DBData } = useContext(Context);
-  const [selected, setSelected] = useState("shirts");
   return (
     <section className="drawings-container">
       <Cart></Cart>

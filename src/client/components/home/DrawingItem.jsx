@@ -4,55 +4,59 @@ const DrawingItem = ({ id, name, img, products }) => {
   const { cartList, setCartList, setTotalPrice } =
     useContext(Context);
   const [selectedItem, setSelectedItem] = useState(false);
-  const [size, setSize] = useState(null);
-  const [type, setType] = useState("shirt");
-  const [color, setColor] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedAge, setSelectedAge] = useState(null)
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedProductId, setSelectedProductId] = useState("");
   const [price, setPrice] = useState(null);
-
   const itemRef = useRef(null);
 
   useEffect(() => {
-     const media700 = window.matchMedia("(min-width: 700px)");
-      const media1000 = window.matchMedia("(min-width: 1000px)");
-      const handleChange = () => {
-        if (itemRef.current) {
-        itemRef.current.style.setProperty(
-          "--height",
-          `${itemRef.current.scrollHeight}px`,
-        );
+    const media700 = window.matchMedia("(min-width: 700px)");
+    const media1000 = window.matchMedia("(min-width: 1000px)");
+    const handleChange = () => {
+      if (itemRef.current) {
+        //   itemRef.current.style.setProperty(
+        //      "--height",
+        //      `${itemRef.current.scrollHeigh}px`,
+        //  );
       }
-    
-     
-    } 
-    handleChange()
-      media700.addEventListener('change', handleChange)
-      media1000.addEventListener('change', handleChange)
-    
 
-    return ()=>{
+
+    }
+    handleChange()
+    media700.addEventListener('change', handleChange)
+    media1000.addEventListener('change', handleChange)
+
+
+    return () => {
       media700.removeEventListener('change', handleChange)
       media1000.removeEventListener('change', handleChange)
 
     }
   }, [selectedItem]);
-  useEffect(()=>{
-    setPrice(products?.prices?.[type])
-  },[type]);
+
+  useEffect(() => {
+    setPrice(selectedProduct?.price)
+  }, [selectedProductId]);
+
   const handleAddtoCartBtnClick = (e) => {
     e.stopPropagation();
-    if (size && color || type === "bag" &&color) {
-      setTotalPrice((prevPrice)=>Math.round((prevPrice+price)*100)/100)
+    if (selectedSize && selectedColor) {
+      setTotalPrice((prevPrice) => Math.round((prevPrice + price) * 100) / 100)
       const cartId = crypto.randomUUID();
       setCartList((prevList) => [
         ...prevList,
         {
           id: cartId,
-          type,
-          size,
+          drawingName: name,
+          productId: selectedProductId,
+          productName: selectedProduct.name,
+          size: selectedSize,
           price,
-          name,
           img,
-          color
+          color: selectedColor
         },
       ]);
       setSelectedItem(false)
@@ -62,12 +66,18 @@ const DrawingItem = ({ id, name, img, products }) => {
     if (selectedItem) setSelectedItem(false);
     else setSelectedItem(true);
   };
-  const handleSizeBtnClick = (e, newSize) => {
-    setSize(newSize);
+  const handleSizeBtnClick = (newSize) => {
+    setSelectedSize(newSize);
   };
-  const handleColorBtnClick = (e, color) => {
-    setColor(color);
+  const handleColorBtnClick = (color) => {
+    setSelectedColor(color);
   };
+
+  const handleSelectProduct = (e)=>{
+    setSelectedProductId(e.target.value)
+    setSelectedProduct(products.find(product=>product.id == e.target.value))
+    setSelectedSize(null)
+  }
   return (
     <>
       <div
@@ -83,85 +93,65 @@ const DrawingItem = ({ id, name, img, products }) => {
             <select
               id="product-type"
               name="product-type"
-              value={type}
-              onChange={(e) => {
-                setType(e.target.value)
-              }}
+              value={selectedProductId}
+              onChange={(e) => handleSelectProduct(e)}
             >
+              <option value="">Seleccionar</option>
               {
-                products.map((product, i)=> 
-                <option key={i} value={product.name}>{product.name}</option>
+                products.map((product, i) =>
+                  <option key={i} value={product.id}>{product.name}</option>
                 )
               }
             </select>
           </div>
           <div className="color">
-            <button
-              className={
-                color === "red"
-                  ? "color-btn selected-color red"
-                  : "sizecolor red"
-              }
-              onClick={(e) => handleColorBtnClick(e, "red")}
-            ></button>
-            <button
-              className={
-                color === "green"
-                  ? "color-btn selected-color green"
-                  : "sizecolor green"
-              }
-              onClick={(e) => handleColorBtnClick(e, "green")}
-            ></button>
-            <button
-              className={
-                color === "blue"
-                  ? "color-btn selected-color blue"
-                  : "sizecolor blue"
-              }
-              onClick={(e) => handleColorBtnClick(e, "blue")}
-            ></button>
-            <button
-              className={
-                color === "yellow"
-                  ? "color-btn selected-color yellow"
-                  : "sizecolor yellow"
-              }
-              onClick={(e) => handleColorBtnClick(e, "yellow")}
-            ></button>
+            {
+              products.find(product => product.id == selectedProductId)?.colors.map((col, i) => {
+                return <button key={i}
+                  className={
+                    selectedColor === col
+                      ? "color-btn selected-color"
+                      : "color-btn"
+                  }
+                  style={{ backgroundColor: col.hex }}
+                  onClick={(e) => handleColorBtnClick(col)}
+                ></button>
+              })
+            }
+
           </div>
-          {(type === "shirt" || type === "sweater") && (
-            <div className="size">
-              <button
-                className={
-                  size === "XS" ? "size-btn selected-size" : "size-btn"
-                }
-                onClick={(e) => handleSizeBtnClick(e, "XS")}
-              >
-                XS
-              </button>
-              <button
-                className={size === "S" ? "size-btn selected-size" : "size-btn"}
-                onClick={(e) => handleSizeBtnClick(e, "S")}
-              >
-                S
-              </button>
-              <button
-                className={size === "M" ? "size-btn selected-size" : "size-btn"}
-                onClick={(e) => handleSizeBtnClick(e, "M")}
-              >
-                M
-              </button>
-              <button
-                className={size === "L" ? "size-btn selected-size" : "size-btn"}
-                onClick={(e) => handleSizeBtnClick(e, "L")}
-              >
-                L
-              </button>
+          {(selectedProductId !== "") && (
+          <div className="ages-container">
+            <div className="ages">
+            {
+                 selectedProduct?.ages.map((age, i)=>{
+                    return <button className={
+                      selectedAge == age ? "age-btn selected-age" : "age-btn"
+                    }key={i} onClick={()=>setSelectedAge(age)}>{age.age.name}</button>
+                  })
+                 
+              }
+            </div> 
+          {selectedAge && 
+              <div className="sizes">
+                {selectedAge.sizes.map((size, i)=>{
+                  return <button
+                  key={i}
+                  className={
+                    selectedSize === size ? "size-btn selected-size" : "size-btn"
+                  }
+                  onClick={(e) => handleSizeBtnClick(size)}
+                >
+                  {size.name}
+                </button>
+                })}
+              </div>}
             </div>
+
           )}
-          {type && (
+          {selectedProductId && (
             <div className="price">
-              <p>PRECIO</p>
+              <p>{selectedProduct.price}€</p>
             </div>
           )}
           <button

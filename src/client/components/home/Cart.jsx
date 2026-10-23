@@ -22,14 +22,25 @@ const Cart = () => {
               return (
                 <CartItem
                   key={i}
-                  type={item.type}
                   id={item.id}
+                  drawingName={item.drawingName}
+                  productId={item.productId}
+                  productName={item.productName}
                   size={item.size}
                   price={item.price}
-                  name={item.name}
                   img={item.img}
                   color={item.color}
                 />
+                // {
+                //   id: cartId,
+                //   drawingName: name,
+                //   productId: selectedProductId,
+                //   productName: selectedProduct.name,
+                //   size: selectedSize,
+                //   price,
+                //   img,
+                //   color: selectedColor
+                // },
               );
             })}
             <div className="total-price">
