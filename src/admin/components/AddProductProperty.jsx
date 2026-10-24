@@ -1,5 +1,5 @@
 import { MdExpandMore } from "react-icons/md";
-import { useContext, useEffect, useState } from "react";
+import {useState } from "react";
 
 
 const AddProductProperty = ({type, typeArr, setTypeArr})=>{
@@ -19,7 +19,7 @@ const [inputName, setInputName] = useState('')
     else if (type =='ages') setTypeArr(prevArr=> [...prevArr, {name: inputName, sizes: inputSizes}])
   }
     return <div className="property">
-            <h3 onClick={() => handleH3Click()}>{type}<MdExpandMore className="expand-icon" /></h3>
+            <h3 onClick={() => handleH3Click()}>{type == 'colors' ? 'Colores': 'Edades'}<MdExpandMore className="expand-icon" /></h3>
             {open && <div className="property-container">
                  <div className="property-items-container">
             
@@ -35,7 +35,7 @@ const [inputName, setInputName] = useState('')
              <input type="text"  placeholder="Nombre" value={inputName} onChange={(e)=>setInputName(e.target.value)}/>
             {type == 'colors' &&<input type="text" placeholder="Código HEX" value={inputHex} onChange={(e)=>setInputHex(e.target.value)}/>}
             {type == 'ages' && <input type="text" placeholder="Tallas Ej. (XS, S, 6HILABETE...)" value={inputSizes} onChange={(e)=>setInputSizes(e.target.value)}/>}
-            <button type="button" onClick={(e)=>addPropertyItem(e)}>Add property</button>
+            <button type="button" onClick={(e)=>addPropertyItem(e)}>Añadir propiedad</button>
                
             </div>
             </div>}

@@ -13,94 +13,9 @@ import jertsea1 from "../assets/jertsea1.png";
 import jertsea2 from "../assets/jertsea2.png";
 import jertsea3 from "../assets/jertsea3.png";
 import jertsea4 from "../assets/jertsea4.png";
+
+
 export const Context = createContext(null);
-// const products = {
-//   drawings: [
-//     {
-//        id: crypto.randomUUID(),
-//        name: "mendiak",
-//        img: mendiak,  
-//     },
-//     {
-//        id: crypto.randomUUID(),
-//        name: "sutan",
-//        img: sutan,  
-//     },{
-//        id: crypto.randomUUID(),
-//        name: "olatua",
-//        img: olatua,  
-//     },{
-//        id: crypto.randomUUID(),
-//        name: "ortzadarra",
-//        img: ortzadarra,  
-//     },
-//   ],
-//   prices: {
-//     shirt: 20.99,
-//     sweatshirt: 40.99,
-//     bag: 10.99
-//   },
-  
-//   //   {
-//   //     id: crypto.randomUUID(),
-//   //     type: "shirt",
-//   //     price: 20.99,
-//   //     name: "kamiseta 1",
-//   //     img: camiseta1,
-//   //   },
-//   //   {
-//   //     id: crypto.randomUUID(),
-//   //     type: "shirt",
-//   //     price: 24.99,
-//   //     name: "kamiseta 2",
-//   //     img: camiseta2,
-//   //   },
-//   //   {
-//   //     id: crypto.randomUUID(),
-//   //     type: "shirt",
-//   //     price: 20.99,
-//   //     name: "kamiseta 3",
-//   //     img: camiseta3,
-//   //   },
-//   //   {
-//   //     id: crypto.randomUUID(),
-//   //     type: "shirt",
-//   //     price: 20.99,
-//   //     name: "kamiseta 4",
-//   //     img: camiseta4,
-//   //   },
-//   // ],
-//   // sweaters: [
-//   //   {
-//   //     id: crypto.randomUUID(),
-//   //     type: "sweater",
-//   //     price: 20.99,
-//   //     name: "jertsea 1",
-//   //     img: jertsea1,
-//   //   },
-//   //   {
-//   //     id: crypto.randomUUID(),
-//   //     type: "sweater",
-//   //     price: 20.99,
-//   //     name: "jertsea 2",
-//   //     img: jertsea2,
-//   //   },
-//   //   {
-//   //     id: crypto.randomUUID(),
-//   //     type: "sweater",
-//   //     price: 20.99,
-//   //     name: "jertsea 3",
-//   //     img: jertsea3,
-//   //   },
-//   //   {
-//   //     id: crypto.randomUUID(),
-//   //     type: "sweater",
-//   //     price: 20.99,
-//   //     name: "jertsea 4",
-//   //     img: jertsea4,
-//   //   },
-//   // ],
-// };
 export const ContextProvider = (props) => {
   const [showCart, setShowCart] = useState(false);
   const [cartList, setCartList] = useState([]);
@@ -108,7 +23,6 @@ export const ContextProvider = (props) => {
 const [session, setSession] = useState(null);
 const [loading, setLoading] = useState(true);
 
-const [products, setProducts] = useState(null)
 const [DBData, setDBData] = useState(null)
 const [selectedProducts, setSelectedProducts] = useState([])
 const [selectedColors, setSelectedColors] = useState([])
@@ -116,6 +30,8 @@ const [selectedAges, setSelectedAges] = useState([])
 const [selectedSizes, setSelectedSizes] = useState([])
 const [selectedSexes, setSelectedSexes] = useState([])
 const [selectedDPColors, setSelectedDPColors] = useState([])
+
+const [showAdminNav, setShowAdminNav] = useState(false)
 useEffect(() => {
 
     // 1. Check session
@@ -146,12 +62,9 @@ useEffect(() => {
         setShowCart,
         cartList,
         setCartList,
-        products,
         totalPrice,
         setTotalPrice,
         session, loading,
-        selectedProducts,
-        setSelectedProducts,
         selectedDPColors, 
         setSelectedDPColors,
         selectedAges,
@@ -161,7 +74,9 @@ useEffect(() => {
         selectedSexes,
         setSelectedSexes,
         DBData,
-        setDBData
+        setDBData,
+        showAdminNav,
+        setShowAdminNav
       }}
     >
       {props.children}

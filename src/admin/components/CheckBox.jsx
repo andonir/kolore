@@ -24,8 +24,8 @@ const CheckBox = ({ type, typeList, selectedType, setSelectedType }) => {
         <div className="top">
             <h3 onClick={() => handleH3Click()}>{type == 'products' ? 'Productos' : type == 'ages' ? 'Edades' : type == 'sizes' ? 'Tallas' : type == 'sexes' ? 'Sexo' : 'Colores'} <MdExpandMore className="expand-icon" /></h3>
             <div className="check-all">
-                <input type="checkbox" id={'checkAll'} onChange={() => handleCheckAll()} />
-                <label htmlFor={'checkAll'}>Check all</label></div>
+                <input type="checkbox" id='checkAll' onChange={() => handleCheckAll()} />
+                <label htmlFor='checkAll'>Seleccionar todo</label></div>
         </div>
         <div className={open ? "checkboxes open" : "checkboxes"}>
             {typeList && typeList.map((item, i) => {

@@ -31,16 +31,6 @@ const Cart = () => {
                   img={item.img}
                   color={item.color}
                 />
-                // {
-                //   id: cartId,
-                //   drawingName: name,
-                //   productId: selectedProductId,
-                //   productName: selectedProduct.name,
-                //   size: selectedSize,
-                //   price,
-                //   img,
-                //   color: selectedColor
-                // },
               );
             })}
             <div className="total-price">
