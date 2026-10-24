@@ -5,25 +5,11 @@ import AddProductProperty from "../components/AddProductProperty"
 import AddProductPrice from "../components/AddProductPrice";
 import { Context } from "../../Context/Context";
 import {
-  readProducts,
-  readAges,
-  readSizes,
-  readSexes,
   addProduct
 } from "../../supabase/functions";
 
 const AddProduct = () => {
   const {
-    selectedProducts,
-    setSelectedProducts,
-    selectedColors,
-    setSelectedColors,
-    selectedAges,
-    setSelectedAges,
-    selectedSizes,
-    setSelectedSizes,
-    selectedSexes,
-    setSelectedSexes,
     setShowAdminNav
   } = useContext(Context);
   const [colors, setColors] = useState([])

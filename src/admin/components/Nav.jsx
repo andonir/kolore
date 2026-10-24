@@ -6,11 +6,15 @@ const Nav = ()=>{
     return <nav className={showAdminNav ? "admin-nav show" : "admin-nav"}>
         <ul>
             <li>
-            <NavLink to={"admin/add-product"} className={({isActive})=> isActive ? 'nav-link active':"nav-link"}>Añadir producto</NavLink>
+            <NavLink to={"admin/orders"} className={({isActive})=> isActive ? 'nav-link active':"nav-link"}>Gestionar pedidos</NavLink>
 
             </li>
             <li>
             <NavLink to={"admin/add-drawing"} className={({isActive})=> isActive ? 'nav-link active':"nav-link"}>Añadir dibujo</NavLink>
+
+            </li>
+            <li>
+            <NavLink to={"admin/add-product"} className={({isActive})=> isActive ? 'nav-link active':"nav-link"}>Añadir producto</NavLink>
 
             </li>
         </ul>

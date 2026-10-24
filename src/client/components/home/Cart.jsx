@@ -3,7 +3,12 @@ import { useContext } from "react";
 import { IoClose } from "react-icons/io5";
 import CartItem from "./CartItem";
 const Cart = () => {
-  const { showCart, setShowCart, cartList, totalPrice } = useContext(Context);
+  const { showCart, setShowCart, cartList, totalPrice, setShowCheckoutModal } = useContext(Context);
+  
+  const handleBuyClick = ()=>{
+    setShowCheckoutModal(true)
+
+  }
   return (
     <section className={showCart ? "cart show" : "cart"}>
       <div className="cart-top">
@@ -22,11 +27,12 @@ const Cart = () => {
               return (
                 <CartItem
                   key={i}
-                  id={item.id}
+                  id={item.cartItemId}
                   drawingName={item.drawingName}
                   productId={item.productId}
                   productName={item.productName}
                   size={item.size}
+                  age={item.age}
                   price={item.price}
                   img={item.img}
                   color={item.color}
@@ -36,7 +42,7 @@ const Cart = () => {
             <div className="total-price">
               <h4>Guztira: {totalPrice}€</h4>
             </div>
-            <button className="buy">Erosi</button>
+            <button className="buy" onClick={()=>handleBuyClick()}>Erosi</button>
           </>
         )}
       </div>

@@ -10,32 +10,21 @@ const DrawingItem = ({ id, name, img, products }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState("");
   const [price, setPrice] = useState(null);
-  const itemRef = useRef(null);
 
-  useEffect(() => {
-    const media700 = window.matchMedia("(min-width: 700px)");
-    const media1000 = window.matchMedia("(min-width: 1000px)");
-    const handleChange = () => {
-      if (itemRef.current) {
-        //   itemRef.current.style.setProperty(
-        //      "--height",
-        //      `${itemRef.current.scrollHeigh}px`,
-        //  );
-      }
+  // useEffect(() => {
+  //   const media700 = window.matchMedia("(min-width: 700px)");
+  //   const media1000 = window.matchMedia("(min-width: 1000px)");
+  //   handleChange()
+  //   media700.addEventListener('change', handleChange)
+  //   media1000.addEventListener('change', handleChange)
 
 
-    }
-    handleChange()
-    media700.addEventListener('change', handleChange)
-    media1000.addEventListener('change', handleChange)
+  //   return () => {
+  //     media700.removeEventListener('change', handleChange)
+  //     media1000.removeEventListener('change', handleChange)
 
-
-    return () => {
-      media700.removeEventListener('change', handleChange)
-      media1000.removeEventListener('change', handleChange)
-
-    }
-  }, [selectedItem]);
+  //   }
+  // }, [selectedItem]);
 
   useEffect(() => {
     setPrice(selectedProduct?.price)
@@ -49,11 +38,13 @@ const DrawingItem = ({ id, name, img, products }) => {
       setCartList((prevList) => [
         ...prevList,
         {
-          id: cartId,
+          cartItemid: cartId,
           drawingName: name,
+          drawingId: id,
           productId: selectedProductId,
           productName: selectedProduct.name,
           size: selectedSize,
+          age: {id: selectedAge.age.id, name: selectedAge.age.name},
           price,
           img,
           color: selectedColor
@@ -81,7 +72,6 @@ const DrawingItem = ({ id, name, img, products }) => {
   return (
     <>
       <div
-        ref={itemRef}
         className={selectedItem ? "drawing-item selected-item" : "drawing-item"}
         onClick={() => handleItemClick()}
       >
@@ -104,7 +94,7 @@ const DrawingItem = ({ id, name, img, products }) => {
               }
             </select>
           </div>
-          <div className="color">
+          <div className="colors">
             {
               products.find(product => product.id == selectedProductId)?.colors.map((col, i) => {
                 return <button key={i}

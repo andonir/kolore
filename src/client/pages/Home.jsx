@@ -4,6 +4,7 @@ import Cart from "../components/home/Cart";
 import { useContext, useEffect } from "react";
 import { Context } from "../../Context/Context";
 import { readDB } from "../../supabase/functions";
+import CheckoutModal from "../components/home/CheckoutModal";
 const Home = () => {
   const {setDBData} = useContext(Context)
   useEffect(()=>{
@@ -22,6 +23,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+    <CheckoutModal></CheckoutModal>
     <DrawingsContainer></DrawingsContainer>
       
     </main>

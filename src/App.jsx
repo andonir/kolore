@@ -1,15 +1,13 @@
 import './App.css'
-
 import { Routes, Route, Navigate } from "react-router-dom"
 import Home from "./client/pages/Home.jsx"
 import AdminLogin from "./admin/pages/AdminLogin.jsx"
-import Header from './client/components/Header.jsx'
-import Footer from './client/components/Footer.jsx'
+import Header from "./common/components/Header"
+import Footer from './common/components/Footer.jsx'
 import ProtectedRoute from './common/components/ProtectedRoute'
-import { useContext } from 'react'
-import { Context } from './Context/Context.jsx'
 import AddProduct from './admin/pages/AddProduct'
 import AddDrawing from './admin/pages/AddDrawing'
+import Orders from './admin/pages/Orders'
 function App() {
   return <>
     <Header></Header>
@@ -19,7 +17,7 @@ function App() {
       <Route element={<ProtectedRoute/>}>
         <Route path="/admin/add-product" element={<AddProduct />}></Route>
         <Route path="/admin/add-drawing" element={<AddDrawing />}></Route>
-
+        <Route path="/admin/orders" element={<Orders />}></Route>
       </Route>
       <Route path='*' element={<Navigate to="/" replace />}></Route>
     </Routes>

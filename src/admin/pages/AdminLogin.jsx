@@ -10,7 +10,7 @@ const AdminLogin = ()=>{
         e.preventDefault()
         logIn(e.target.email.value, e.target.password.value)
         if(session) {
-            navigate('/admin/home')
+            navigate('/admin/add-drawing')
         }
     }
     return <main className="login">

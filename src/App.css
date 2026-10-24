@@ -118,17 +118,9 @@ header {
 
 .home .drawings-container .drawings .drawing-item {
   width: 140px;
-  /* height: 170px; */
-  height: 500px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  overflow: hidden;
-  transition: height 0.3s;
-}
-.home .drawings-container .drawings .selected-item {
-  height: var(--height);
-}
+  gap: 5px;}
 .home .drawings-container .drawings .drawing-item:hover {
   cursor: pointer;
 }
@@ -144,6 +136,12 @@ header {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  transform: scaleY(0);
+  transition: transform .3s;
+  transform-origin: top;
+}
+.home .drawings-container .drawings .selected-item .item-bottom{
+  transform: scaleY(1)
 }
 .home .drawings-container .drawings .item-bottom select {
   border: 1px solid var(--primary-color);
@@ -156,7 +154,7 @@ header {
 .home .drawings-container .drawings .item-bottom select:hover {
   cursor: pointer;
 }
-.home .drawings-container .drawings .item-bottom .color,
+.home .drawings-container .drawings .item-bottom .colors,
 .home .drawings-container .drawings .item-bottom .size {
   display: flex;
   align-items: center;
@@ -164,17 +162,16 @@ header {
   gap: 20px;
   margin-top: 5px;
 }
-.home .drawings-container .drawings .item-bottom .color {
-  width: 90%;
-  margin: 5px auto 0 auto;
+.home .drawings-container .drawings .item-bottom .colors {
+  margin: 10px 0;
 }
-.home .drawings-container .drawings .item-bottom .color button {
+.home .drawings-container .drawings .item-bottom .colors button {
   width: 20px;
   height: 20px;
   border: none;
   border-radius: 100%;
 }
-.home .drawings-container .drawings .item-bottom .color .selected-color {
+.home .drawings-container .drawings .item-bottom .colors .selected-color {
   border: 3px solid var(--primary-color);
 }
 
@@ -382,8 +379,118 @@ footer h4 {
   font-weight: 500;
 }
 
+/* Checkout Modal */
+.checkout-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px); /* Compatibilidad con Safari */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
 
+.checkout-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
 
+/* Tarjeta contenedora */
+.checkout-modal-container {
+  width: 90%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Cabecera (.top) e icono de cierre */
+.checkout-modal-container .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkout-modal-container .top h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #111;
+}
+
+.checkout-modal-container .top .close-icon {
+  font-size: 1.2rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.checkout-modal-container .top .close-icon:hover {
+  color: #111;
+}
+.cart-info{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 40px;
+}
+/* Formulario e Inputs */
+.checkout-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkout-modal form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: #fafafa;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+.checkout-modal form .surnames{
+  display: flex;
+  gap: 10px;
+}
+.checkout-modal form input:focus {
+  background: #fff;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px #c8a98a40;
+}
+
+/* Botón Comprar */
+.checkout-modal form button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.checkout-modal form button[type="submit"]:hover {
+  opacity: 0.9;
+}
 /* ADMIN */
 
 /* Login */
@@ -427,6 +534,12 @@ footer h4 {
 .login-form button:hover{
   cursor: pointer;
   background-color: var(--primary-dark-color);
+}
+
+.order-info{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 /* Admin header */
 header .log-out{
@@ -684,10 +797,108 @@ display: none;
   border-radius: 50%;
 }
 
-/* Add product */
+/* Orders */
+/* Contenedor principal */
+.orders {
+  margin: 0 auto;
+  padding: 20px;
+}
 
+.orders h2 {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  color: #111827;
+}
 
-/* Responsive */
+/* 1. Scroll horizontal obligatorio para que entren las 10 columnas */
+.orders-table {
+  display: grid;
+  /* Definición de anchos fijos para cada una de las 10 columnas */
+  grid-template-columns: repeat(10, 1fr);
+  overflow-x: auto; /* Muestra barra de scroll horizontal si no cabe en pantalla */
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Permitir que la cabecera y las filas se integren directamente en las columnas del Grid */
+.grid-header,
+.grid-row {
+  display: contents;
+}
+
+/* 2. Celdas de la Cabecera */
+.grid-header > div {
+  background-color: #f9fafb;
+  color: #4b5563;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 14px;
+  border-bottom: 2px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+}
+
+/* 3. Celdas de las Filas de Pedidos */
+.grid-row > div {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+
+/* Hover al pasar por encima de la fila */
+.grid-row:hover > div {
+  background-color: #f9fafb;
+}
+
+/* 4. Estilo cuando la fila tiene la clase .active */
+.grid-row.active > div {
+  background-color: #eff6ff; /* Fondo azul claro al estar seleccionado */
+  border-bottom-color: #bfdbfe;
+  font-weight: 500;
+}
+
+/* 5. Paneles de Elementos (cada producto) */
+.grid-items-panel {
+  grid-column: 1 / -1; /* Ocupa las 10 columnas completas */
+  background-color: #f8fafc;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  border-left: 4px solid var(--primary-color); /* Línea azul a la izquierda para destacar */
+
+}
+.grid-items-panel-container{
+  display: flex;
+  gap: 20px;
+}
+/* Título de cada elemento dentro del panel */
+.grid-items-panel h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+/* Textos de los detalles dentro del panel */
+.grid-items-panel p {
+  margin: 3px 0;
+  font-size: 0.8rem;
+  color: #475569;
+
+}
+/* Responsive */ 
 
 @media (min-width: 700px) {
   /* drawings container */

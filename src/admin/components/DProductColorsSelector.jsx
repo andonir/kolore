@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { readColors } from "../../supabase/functions"
 import { Context } from "../../Context/Context";
 const DProductColorsSelector = ({ product, open}) => {
-    const { selectedDPColors, setSelectedDPColors, } = useContext(Context)
+    const { selectedDPColors, setSelectedDPColors} = useContext(Context)
     const [colors, setColors] = useState([])
 
     useEffect(() => {
@@ -16,11 +16,6 @@ const DProductColorsSelector = ({ product, open}) => {
         })
     }, [])
 
-
-    const handleH3Click = () => {
-        if (open) setOpen(false)
-        else setOpen(true)
-    }
     const handleCheck = (id, name, hex) => {
         setSelectedDPColors((prev) =>{        
         return prev.map(obj => {
@@ -35,10 +30,6 @@ const DProductColorsSelector = ({ product, open}) => {
         }
         )
     }
-    // const handleCheckAll = () => {
-    //     selectedColors.length == colors.length ? setSelectedColors([]) :
-    //         setSelectedType(typeList.map((item) => ({ id: item.id, name: item.name, ...(item.hex && { hex: item.hex }) })))
-    // }
     return <>
         <div className={open ? "dproduct-colors-selector open" : "dproduct-colors-selector"}>
             <div className={open ? "checkboxes open" : "checkboxes"}>

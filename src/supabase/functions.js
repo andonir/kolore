@@ -1,6 +1,7 @@
 import { data } from "react-router-dom"
 import { supabase } from "./client"
 import { MdInvertColors } from "react-icons/md"
+import { FaKickstarter } from "react-icons/fa"
 export const logIn = async (email, password
 ) => {
     try {
@@ -65,8 +66,8 @@ export const addDataToDB = async ({ productType, colors, ages, sizes, sexes }) =
 }
 export const addProduct = async (productType, colors, ages, price) => {
     // Insert product_types
-    if(!productType || !colors ||!ages ||!price) return 
-    const { data: dataP, error: errorP } = await supabase.from('product_types').insert({ name: productType, price: price}).select('')
+    if (!productType || !colors || !ages || !price) return
+    const { data: dataP, error: errorP } = await supabase.from('product_types').insert({ name: productType, price: price }).select('')
     if (errorP) throw errorP
     // Upsert colors
 
@@ -299,11 +300,6 @@ export const readProducts = async (setProducts) => {
     if (error) throw error
     setProducts(data)
 }
-// export const readProductColors = async (setProductColors) => {
-//     const { data, error } = await supabase.from('colors').select('*');
-//     if (error) throw error
-//     setProductColors(data)
-// }
 
 export const readAges = async (setAges) => {
     const { data, error } = await supabase.from('ages').select('*');
@@ -335,4 +331,80 @@ export const readColors = async (setColors, productId) => {
     const { data: dataC, error: errorC } = await supabase.from('colors').select('*').in('id', rowsColorIds)
     if (errorC) throw errorC
     setColors(dataC)
+}
+
+// Insert order
+
+export const insertOrder = async (name, firstSurname, secondSurname, phone, address, price, cartList, setOrderId, setOrderPrice) => {
+    const processedList = cartList.map(item => {
+        return { cartItemId: item.cartItemId, colorId: item.color.id, drawingId: item.drawingId, price: item.price, productId: item.productId, ageId: item.age?.id, sizeId: item.size?.id }
+
+    })
+
+    const {data, error} = await supabase.from('orders').insert({name, first_surname: firstSurname, second_surname: secondSurname, phone, total_price:price, address, items: processedList}).select()
+    if(error) throw error 
+    setOrderId(data[0].id)
+    setOrderPrice(data[0].total_price)
+}
+
+
+// Get orders
+export const selectOrders = async(setOrders)=>{
+    const {data, error} = await supabase.from('orders').select()
+    if(error) throw error
+    
+    // Process items
+    const drawingIds = data.flatMap(order=>order.items.flatMap((item)=>item.drawingId))
+    const productIds = data.flatMap(order=>order.items.flatMap((item)=>item.productId))
+    const colorIds = data.flatMap(order=>order.items.flatMap((item)=>item.colorId))
+    const ageIds = data.flatMap(order=>order.items.flatMap((item)=>item.ageId))
+    const sizeIds = data.flatMap(order=>order.items.flatMap((item)=>item.sizeId))
+    
+    const {data:dataD, error: errorD} = await supabase.from('drawings').select().in('id', drawingIds)
+    if(errorD) throw errorD
+    const drawingsMap = new Map(dataD.map(d=>[d.id, d]))
+    
+    const {data:dataP, error: errorP} = await supabase.from('product_types').select().in('id', productIds)
+    if(errorP) throw errorP
+    const productsMap = new Map(dataP.map(p=>[p.id, p]))
+
+    const {data: dataC, error: errorC} = await supabase.from('colors').select().in('id', colorIds)
+    if(errorC) throw errorC
+    const colorsMap = new Map(dataC.map(c=>[c.id, c]))
+    
+    const {data:dataA, error: errorA} = await supabase.from('ages').select().in('id',ageIds)
+    if(errorA) throw errorA
+    const agesMap = new Map(dataA.map(a=>[a.id, a]))
+
+    const {data: dataS, error: errorS} = await supabase.from('sizes').select().in('id',sizeIds)
+    const sizesMap = new Map(dataS.map(s=>[s.id, s]))
+    
+    // Process created_at
+    
+    
+    const newOrders = data.map(order=>{    
+        const date = new Date(order.created_at)
+        const fechaEspañola = new Intl.DateTimeFormat('es-ES', {
+            timeZone: 'Europe/Madrid',
+            dateStyle: 'short',
+            timeStyle: 'short'
+          }).format(date)
+                
+        return ({
+        ...order,
+        created_at: fechaEspañola,
+        items: order.items.map(item=>{
+            const {drawingId, productId,colorId,ageId,sizeId, ...newItem} = item
+           return{ ...newItem,
+            drawing: drawingsMap.get(item.drawingId),
+            product: productsMap.get(item.productId),
+            color: colorsMap.get(item.colorId),
+            age: agesMap.get(item.ageId),
+            size: sizesMap.get(item.sizeId)
+        }
+
+        })
+    })})
+    setOrders(newOrders)
+    console.log(newOrders)
 }

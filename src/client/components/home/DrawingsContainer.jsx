@@ -4,7 +4,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { Context } from "../../../Context/Context";
 import Cart from "./Cart";
 const DrawingsContainer = () => {
-  const { cartList,showCart, setShowCart, products, DBData } = useContext(Context);
+  const { cartList, setShowCart, DBData } = useContext(Context);
   return (
     <section className="drawings-container">
       <Cart></Cart>

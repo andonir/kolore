@@ -5,7 +5,6 @@ import { useContext } from "react";
 const CartItem = ({
   id,
   drawingName,
-  productId,
   productName,
   size,
   price,
@@ -17,7 +16,7 @@ const CartItem = ({
     setTotalPrice((prevPrice) => Math.round((prevPrice - price) * 100) / 100);
     const list = cartList;
     const newList = list.filter((item) => {
-      return item.id !== id;
+      return item.cartItemId !== id;
     });
     setCartList(newList);
   };
