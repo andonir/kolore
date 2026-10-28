@@ -4,16 +4,15 @@ import { Context } from "../../Context/Context"
 import { useContext, useEffect, useState } from "react"
 import { readProducts, readAges, readSizes, readSexes } from "../../supabase/functions"
 const AddDrawing = () => {
-    const { selectedProducts, setSelectedProducts, selectedDPColors, setShowAdminNav } = useContext(Context)
+    const { selectedProducts, setSelectedProducts, selectedDPAgesColors, setShowAdminNav } = useContext(Context)
     const [products, setProducts] = useState(null)
     useEffect(() => {
         readProducts(setProducts)
         setShowAdminNav(false)
-
     }, [])
     const handleSubmit = (e) => {
         e.preventDefault()
-            addImg(e.target.img.files?.[0], e.target.name.value, selectedProducts, selectedDPColors)
+            addImg(e.target.img.files?.[0], e.target.name.value, selectedProducts, selectedDPAgesColors)
     }
     return <div className="add-drawing">
         <h2>Añadir dibujo</h2>

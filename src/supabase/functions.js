@@ -64,29 +64,34 @@ export const addDataToDB = async ({ productType, colors, ages, sizes, sexes }) =
         console.log(e)
     }
 }
-export const addProduct = async (productType, colors, ages, price) => {
+export const addProduct = async (productType, ages) => {
     // Insert product_types
-    if (!productType || !colors || !ages || !price) return
-    const { data: dataP, error: errorP } = await supabase.from('product_types').insert({ name: productType, price: price }).select('')
+    if (!productType  || !ages) return
+    const { data: dataP, error: errorP } = await supabase.from('product_types').insert({ name: productType}).select('')
     if (errorP) throw errorP
     // Upsert colors
 
-    const rowsC = colors.map((color) =>
+    const rowsC = ages.flatMap(age=>age.colors.map((color) =>
     ({
         name: color.name,
         hex: color.hex
     })
-    )
-    const { data: dataC, error: errorC } = await supabase.from('colors').upsert(rowsC, { onConflict: 'name', ignoreDuplicates: true }).select('')
+    ))
+    const {error: errorC } = await supabase.from('colors').upsert(rowsC, { onConflict: 'name', ignoreDuplicates: true })
     if (errorC) throw errorC;
+    
 
-    // Insert product_types_colors
-    const rowsPC = dataC.map((row) => ({
-        product_type_id: dataP[0].id,
-        color_id: row.id
-    }))
-    const { data: dataPC, error: errorPC } = await supabase.from('product_types_colors').insert(rowsPC)
-    if (errorC) throw errorC
+    // Select colors 
+    const colorNames = ages.flatMap(age=>age.colors.map(color=>color.name))
+    const { data: dataC, error: errorCS } = await supabase.from('colors').select('id, name, hex').in('name', colorNames)
+    if (errorCS) throw errorCS
+    // // Insert product_types_ages_colors
+    // const rowsPC = dataC.map((row) => ({
+    //     product_type_id: dataP[0].id,
+    //     color_id: row.id
+    // }))
+    // const { data: dataPC, error: errorPC } = await supabase.from('product_types_colors').insert(rowsPC)
+    // if (errorC) throw errorC
 
     // Upsert ages
 
@@ -112,13 +117,17 @@ export const addProduct = async (productType, colors, ages, price) => {
 
     const { data: dataS, error: errorSS } = await supabase.from('sizes').select('id, name').in('name', sizesNames)
     // Insert product_types_ages
-    const rowsPA = dataA.map((row) => ({
-        product_type_id: dataP[0].id,
-        age_id: row.id
-    }))
+    const rowsPA = dataA.map((row) => {
+       const originalAge = ages.find(a=>a.name==row.name)
+        return {
+            product_type_id: dataP[0].id,
+            age_id: row.id,
+            price: originalAge?.price
+       }
+    })
     const { data: dataPA, error: errorPA } = await supabase.from('product_types_ages').insert(rowsPA).select()
     if (errorPA) throw errorPA
-    // Insert product_types_ages_sizes
+    // Insert product_types_ages_sizes && product_types_ages_colors
 
     const newAges = ages.map(age => {
         const ageDb = dataA.find((ageDb) => ageDb.name == age.name)
@@ -129,6 +138,11 @@ export const addProduct = async (productType, colors, ages, price) => {
             id: ageDb.id,
             sizes: age.sizes.map((size) => {
                 return dataS.find(sizeDb => sizeDb.name == size)
+            }),
+            colors: age.colors.map((color)=>{
+                return dataC.find(colorDb=>{
+                    return colorDb.name == color.name
+                })
             })
         }
 
@@ -140,26 +154,21 @@ export const addProduct = async (productType, colors, ages, price) => {
         }))
     }
     )
-
     const { data: dataPAS, error: errorPAS } = await supabase.from('product_types_ages_sizes').insert(rowsPAS).select()
     if (errorPAS) throw errorPAS
 
-    // // Upsert sexes
-    // const rowsSexes = sexes.map(sex => ({ name: sex.name }))
-    // const { error: errorSexes } = await supabase.from('sexes').upsert(rowsSexes, { onConflict: 'name', ignoreDuplicates: true })
-    // if (errorSexes) throw errorSexes
-
-    // const sexesNames = sexes.map(sex => sex.name)
-    // const { data: dataSexes, error: errorSexesS } = await supabase.from('sexes').select('*').in('name', sexesNames)
-    // if (errorSexesS) throw errorSexesS
-    // // Insert product_types_sexes
-    // const rowsPS = dataSexes.map(row => ({ product_type_id: dataP[0].id, sex_id: row.id }))
-    // const { data: dataPS, error: errorPS } = await supabase.from('product_types_sexes').insert(rowsPS).select()
-    // if (errorPS) throw errorPS
-    // console.log('Producto añadido correctamente')
+    const rowsPAC = newAges.flatMap((age)=>{
+        return age.colors.map(color=>({
+            product_type_age_id: age.PAId,
+            color_id: color.id
+        }))
+    })
+    const {data: dataPAC, error:errorPAC} = await supabase.from('product_types_ages_colors').insert(rowsPAC).select()
+    if(errorPAC) throw errorPAC     
+    console.log('Producto añadido correctamente')
 }
 
-export const addImg = async (file, name, products, colors) => {
+export const addImg = async (file, name, products, agesColors) => {
     // Add img to storage
     if (!file) return;
     const filePath = `${crypto.randomUUID()}-${file.name}`;
@@ -177,32 +186,63 @@ export const addImg = async (file, name, products, colors) => {
     const { data: dataDP, error: errorDP } = await supabase.from('drawings_product_types').insert((products.map((product) => ({ drawing_id: drawingId, product_type_id: product.id })))).select()
     if (errorDP) throw (errorDP)
 
-    // DPC
-    const rowsDPC = dataDP.flatMap((dp) => {
-        const product = products.filter(product => product.id == dp.product_type_id)
-        return colors.flatMap(obj =>
-            obj.selectedColors.flatMap((color) => {
-                if (obj.productId == product[0].id) {
-                    return {
-                        drawing_product_type_id: dp.id,
-                        color_id: color.id
-                    }
-                } else {
-                    return []
-                }
-            }
+    // DPA
+    const rowsDPA = dataDP.flatMap((dp)=>{
+        const productSelection = agesColors.find((item)=>item.productId == dp.product_type_id);
+        if(!productSelection ||!productSelection.selectedAgesColors) return [];
+        console.log(productSelection)
+        return productSelection.selectedAgesColors.map((ageObj)=>({
+            drawing_product_type_id: dp.id,
+            age_id: ageObj.ageId
+        }))
+    })
+    if (rowsDPA.length === 0) return;
+    const {data: dataDPA, error: errorDPA} = await supabase.from('drawings_product_types_ages').insert(rowsDPA).select()
+    if(errorDPA) throw errorDPA
+    // DPAC
+    const rowsDPAC = dataDPA.flatMap((dpa)=>{
+        const parentDP = dataDP.find((dp)=>dp.id==dpa.drawing_product_type_id)
+        const productSelection = agesColors.find((item)=>item.productId == parentDP.product_type_id)
+        const ageSelection = productSelection?.selectedAgesColors.find((ageObj)=>ageObj.ageId == dpa.age_id)
+        if(!ageSelection) return[];
 
-            )
+        return ageSelection.colors.map((color)=>({
+            drawing_product_type_age_id: dpa.id,
+            color_id: color.id
+        }))
+    })
+    if (rowsDPAC.length === 0) return
+    const {data:dataDPAC, error: errorDPAC} = await supabase.from('drawings_product_types_ages_colors').insert(rowsDPAC).select();
+    if (errorDPAC) throw errorDPAC
 
-        )
-
-    }
 
 
-    )
-    const { data: dataDPC, error: errorDPC } = await supabase.from('drawings_product_types_colors').insert(rowsDPC).select()
-    if (errorDPC) throw (errorDPC)
-    console.log(dataDPC)
+    // // DPC
+    // const rowsDPC = dataDP.flatMap((dp) => {
+    //     const product = products.filter(product => product.id == dp.product_type_id)
+    //     return colors.flatMap(obj =>
+    //         obj.selectedColors.flatMap((color) => {
+    //             if (obj.productId == product[0].id) {
+    //                 return {
+    //                     drawing_product_type_id: dp.id,
+    //                     color_id: color.id
+    //                 }
+    //             } else {
+    //                 return []
+    //             }
+    //         }
+
+    //         )
+
+    //     )
+
+    // // }
+
+
+    // )
+    // const { data: dataDPC, error: errorDPC } = await supabase.from('drawings_product_types_colors').insert(rowsDPC).select()
+    // if (errorDPC) throw (errorDPC)
+    // console.log(dataDPC)
 
     // PA
     // const rowsPA = products.flatMap((p) =>
@@ -240,10 +280,19 @@ export const readDB = async (setDBData) => {
     // Read products
     const { data: dataP, error: errorP } = await supabase.from('product_types').select('*');
     if (errorP) throw (errorP)
-    // Read DPS --> Falta hacer una correcta asignacion de colores en el admin
-    const { data: dataDPC, error: errorDPC } = await supabase.from('drawings_product_types_colors').select('*')
-    if (errorDPC) throw (errorDPC)
-    // Read colors
+
+
+    // DPA, DPAC,
+
+    const {data: dataDPA, error: errorDPA} = await supabase.from('drawings_product_types_ages').select('*')
+    if(errorDPA) throw errorDPA
+
+    const {data: dataDPAC, error: errorDPAC} = await supabase.from('drawings_product_types_ages_colors').select('*')
+    if(errorDPAC) throw errorDPAC
+    // // Read DPS --> Falta hacer una correcta asignacion de colores en el admin
+    // const { data: dataDPC, error: errorDPC } = await supabase.from('drawings_product_types_colors').select('*')
+    // if (errorDPC) throw (errorDPC)
+    // // Read colors
     const { data: dataC, error: errorC } = await supabase.from('colors').select('*')
     if (errorC) throw (errorC)
     // const colors = dataC.filter(color => dataDPC.some((dpcItem) => dpcItem.color_id == color.id && dataDP.some((dpItem) => dpItem.id == dpcItem.drawing_product_type_id)))
@@ -265,28 +314,41 @@ export const readDB = async (setDBData) => {
         ...row,
         url: supabase.storage.from('drawings-img').getPublicUrl(row.image_path).data.publicUrl,
         products: dataP.filter(product => dataDP.some(item =>
-            item.drawing_id === row.id && item.product_type_id == product.id
-        )).map((product) => ({
-            ...product, colors:
+            item.drawing_id == row.id && item.product_type_id == product.id
+        )).map((product) => {
+            const dpItem = dataDP.find((dp)=>dp.drawing_id === row.id && dp.product_type_id == product.id)
+            return{...product, 
+                ages: dataA.map((age)=>{
+                    const paItem = dataPA.find((pa)=>pa.age_id == age.id && pa.product_type_id == product.id);
+                    const validPAS = dataPAS.filter((pas)=>pas.product_type_age_id == paItem?.id)
+                    const sizes = validPAS.map((pas)=>dataS.find((s)=>s.id ==pas.size_id)).filter(Boolean);
+                                        const dpaItem = dataDPA.find((dpa)=>dpa.drawing_product_type_id == dpItem?.id && dpa.age_id == age.id)
+                    const colors = dpaItem? dataC.filter((color)=>dataDPAC.some((dpac)=>dpac.drawing_product_type_age_id == dpaItem.id && dpac.color_id ==color.id)):[];
+                    const price = paItem?.price
+                    return {...age,sizes,colors,price}
+                }).filter((age)=>age.sizes.length>0 || age.colors.length>0),
+                
+                
+            //     colors:
 
-                dataC.filter(color => {
-                    const dpItem = dataDP.filter(dpItem => dpItem.product_type_id == product.id && dpItem.drawing_id == row.id)
-                    const ans = dataDPC.some((dpcItem) => {
-                        return dpcItem.color_id == color.id && dpcItem.drawing_product_type_id == dpItem[0].id
-                    })
-                    return ans
-                }),
-            ages: dataA.map((age => {
+            //     dataC.filter(color => {
+            //         const dpItem = dataDP.filter(dpItem => dpItem.product_type_id == product.id && dpItem.drawing_id == row.id)
+            //         const ans = dataDPC.some((dpcItem) => {
+            //             return dpcItem.color_id == color.id && dpcItem.drawing_product_type_id == dpItem[0].id
+            //         })
+            //         return ans
+            //     }),
+            // ages: dataA.map((age => {
 
-                const validPA = dataPA.filter(itemPA => itemPA.age_id == age.id)
-                const validPAS = dataPAS.filter(itemPAS => validPA.some(itemPA =>
-                    itemPA.id == itemPAS.product_type_age_id && product.id == itemPA.product_type_id))
-                const sizes = validPAS.map(itemPAS => {
-                    return dataS.find(size => size.id == itemPAS.size_id)
-                })
-                return { age, sizes }
-            })).filter(age => age.sizes.length > 0)
-        }))
+            //     const validPA = dataPA.filter(itemPA => itemPA.age_id == age.id)
+            //     const validPAS = dataPAS.filter(itemPAS => validPA.some(itemPA =>
+            //         itemPA.id == itemPAS.product_type_age_id && product.id == itemPA.product_type_id))
+            //     const sizes = validPAS.map(itemPAS => {
+            //         return dataS.find(size => size.id == itemPAS.size_id)
+            //     })
+            //     return { age, sizes }
+            // })).filter(age => age.sizes.length > 0)
+    }})
 
     }))
     console.log(arr)
@@ -321,6 +383,60 @@ export const readSexes = async (setSexes) => {
 
 
 // Read colors for DProductColorsSelector
+
+export const readAgesColors = async(setAgesColors, productId)=>{
+   
+    const { data, error } = await supabase
+    .from('product_types_ages')
+    .select(`
+      id,
+      product_type_id,
+      age_id,
+      ages(id, name),
+      product_types_ages_colors (
+        id,
+        colors (
+          id,
+          name,
+          hex
+        )
+      )
+    `)
+    .eq('product_type_id', productId);
+
+  if (error) throw error;
+    const processedData = data.map(age=>{
+        return {
+            name: age.ages.name,
+            id: age.ages.id,
+            colors: age.product_types_ages_colors.map(color=>({PACId: color.id, name: color.colors.name, id: color.colors.id, hex: color.colors.hex}))
+        }
+    })
+    setAgesColors(processedData)
+   
+   
+   
+   
+   
+   
+    // // Get PAId
+    // const {data: dataPA, error: errorPA} = await supabase.from('product_types_ages').select('id').eq('product_type_id', productId)
+    // if(errorPA) throw(errorPA)
+    // // Get PAC
+    // const PAIds = dataPA.map(paItem => paItem.id)
+    // const {data: dataPAC, error: errorPAC} = await supabase.from('product_types_ages_colors').select('*').in('product_type_age_id', PAIds)
+    // if(errorPAC) throw(errorPAC)
+
+    // // Get colors
+    // const colorIds = dataPAC.map(pacItem => pacItem.color_id)
+    // const {data: dataC, error: errorC} = await supabase.from('colors').select('*').in('id',colorIds)
+    // if(errorC) throw errorC
+    // console.log(dataC)
+    // const agesColors = dataPA.map(paItem=>{
+
+    // })
+}
+
 
 export const readColors = async (setColors, productId) => {
     // Get colors Ids
@@ -407,4 +523,10 @@ export const selectOrders = async(setOrders)=>{
     })})
     setOrders(newOrders)
     console.log(newOrders)
+}
+
+export const changeOrderPS = async(id, newStatus, setCurrentStatus)=>{
+    const {data, error} = await supabase.from('orders').update({payment_status: newStatus}).eq('id', id).select('*')
+    if(error) throw error
+    setCurrentStatus(data[0].payment_status)
 }

@@ -9,7 +9,6 @@ const DrawingItem = ({ id, name, img, products }) => {
   const [selectedAge, setSelectedAge] = useState(null)
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState("");
-  const [price, setPrice] = useState(null);
 
   // useEffect(() => {
   //   const media700 = window.matchMedia("(min-width: 700px)");
@@ -26,26 +25,22 @@ const DrawingItem = ({ id, name, img, products }) => {
   //   }
   // }, [selectedItem]);
 
-  useEffect(() => {
-    setPrice(selectedProduct?.price)
-  }, [selectedProductId]);
-
   const handleAddtoCartBtnClick = (e) => {
     e.stopPropagation();
     if (selectedSize && selectedColor) {
-      setTotalPrice((prevPrice) => Math.round((prevPrice + price) * 100) / 100)
+      setTotalPrice((prevPrice) => Math.round((prevPrice + selectedAge.price) * 100) / 100)
       const cartId = crypto.randomUUID();
       setCartList((prevList) => [
         ...prevList,
         {
-          cartItemid: cartId,
+          cartItemId: cartId,
           drawingName: name,
           drawingId: id,
           productId: selectedProductId,
           productName: selectedProduct.name,
           size: selectedSize,
-          age: {id: selectedAge.age.id, name: selectedAge.age.name},
-          price,
+          age: { id: selectedAge.id, name: selectedAge.name },
+          price: selectedAge.price,
           img,
           color: selectedColor
         },
@@ -64,9 +59,9 @@ const DrawingItem = ({ id, name, img, products }) => {
     setSelectedColor(color);
   };
 
-  const handleSelectProduct = (e)=>{
+  const handleSelectProduct = (e) => {
     setSelectedProductId(e.target.value)
-    setSelectedProduct(products.find(product=>product.id == e.target.value))
+    setSelectedProduct(products.find(product => product.id == e.target.value))
     setSelectedSize(null)
   }
   return (
@@ -94,8 +89,59 @@ const DrawingItem = ({ id, name, img, products }) => {
               }
             </select>
           </div>
+
+          {(selectedProductId !== "") && (
+            <div className="ages-container">
+              <div className="ages">
+                {
+                  selectedProduct?.ages.map((age, i) => {
+                    return <button className={
+                      selectedAge == age ? "age-btn selected-age" : "age-btn"
+                    } key={i} onClick={() => setSelectedAge(age)}>{age.name}</button>
+                  })
+
+                }
+              </div>
+              {selectedAge &&
+                <>
+                  <div className="sizes">
+                    {selectedAge.sizes.map((size, i) => {
+                      return <button
+                        key={i}
+                        className={
+                          selectedSize === size ? "size-btn selected-size" : "size-btn"
+                        }
+                        onClick={(e) => handleSizeBtnClick(size)}
+                      >
+                        {size.name}
+                      </button>
+                    })}
+                  </div>
+                  <div className="colors">
+                    {
+                      selectedAge.colors.map((col, i) => {
+                        return <button key={i}
+                          className={
+                            selectedColor === col
+                              ? "color-btn selected-color"
+                              : "color-btn"
+                          }
+                          style={{ backgroundColor: col.hex }}
+                          onClick={(e) => handleColorBtnClick(col)}
+                        ></button>
+                      })
+                    }
+                  </div>
+                </>
+              }
+            </div>
+
+          )}
+
+          {/* 
           <div className="colors">
             {
+            
               products.find(product => product.id == selectedProductId)?.colors.map((col, i) => {
                 return <button key={i}
                   className={
@@ -107,41 +153,13 @@ const DrawingItem = ({ id, name, img, products }) => {
                   onClick={(e) => handleColorBtnClick(col)}
                 ></button>
               })
-            }
+            } */}
 
-          </div>
-          {(selectedProductId !== "") && (
-          <div className="ages-container">
-            <div className="ages">
-            {
-                 selectedProduct?.ages.map((age, i)=>{
-                    return <button className={
-                      selectedAge == age ? "age-btn selected-age" : "age-btn"
-                    }key={i} onClick={()=>setSelectedAge(age)}>{age.age.name}</button>
-                  })
-                 
-              }
-            </div> 
-          {selectedAge && 
-              <div className="sizes">
-                {selectedAge.sizes.map((size, i)=>{
-                  return <button
-                  key={i}
-                  className={
-                    selectedSize === size ? "size-btn selected-size" : "size-btn"
-                  }
-                  onClick={(e) => handleSizeBtnClick(size)}
-                >
-                  {size.name}
-                </button>
-                })}
-              </div>}
-            </div>
+          {/* </div> */}
 
-          )}
-          {selectedProductId && (
+          {selectedAge && (
             <div className="price">
-              <p>{selectedProduct.price}€</p>
+              <p>{selectedAge.price}€</p>
             </div>
           )}
           <button

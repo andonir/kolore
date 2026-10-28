@@ -632,10 +632,141 @@ header nav ul li .nav-link.active{
   font-size: 16px;
   width: 180px;
 }
-.add-product .product-type, .add-drawing .img-name-input{
+.add-product .product-name, .add-drawing .img-name-input{
   padding: 10px;
 }
 /* add-product */
+
+/* product-type-selector */
+.product-type-selector{
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+/* Ocultar el input nativo */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Fondo del interruptor (Estado OFF) */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+/* Círculo deslizante */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+/* Cambio de color de fondo (Estado ON) */
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+/* Desplazamiento del círculo a la derecha */
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+
+/* add-product-age */
+.add-product .ages{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  
+}
+
+.add-product .ages .ages-items-container{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.add-product .ages .ages-items-container .age-item .age-item-content{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.add-product .ages-items-container .age-item .age-item-content .age-item-colors{
+  display: flex;
+  gap: 20px;
+}
+.add-product .ages-items-container .age-item .age-item-content .age-item-colors .age-item-color-item{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-product .ages .add-age-items{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.add-product .ages .add-age-items .price,.add-product .ages .add-age-items .sizes, .add-product .ages .add-age-items .colors{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.add-product .ages .add-age-items .colors .add-color{
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  gap: 10px;
+}
+ 
+.add-product .ages .add-age-items .colors .color-item{
+  display:flex;
+  align-items: center;
+  gap: 10px;
+}
+.add-product .ages .add-age-btn{
+  font-size: 15px;
+  width: 180px;
+}
+.add-product .ages .color-div{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+/* ------- */
+
+
+
+
+
+
+
+
+
+
 
 .add-product .property, .add-product .add-product-price{
   display: flex;
@@ -677,14 +808,10 @@ header nav ul li .nav-link.active{
   flex-direction: column;
   gap: 10px;
 }
-.add-product .property-container .property-items-container .color-div{
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-}
+
+
 
 /* ADD DRAWING */
-
 
 .add-drawing input::file-selector-button{
   background-color: var(--primary-color);
@@ -701,9 +828,7 @@ header nav ul li .nav-link.active{
 .add-drawing button{
   padding: 20px 50px;
 }
-.add-drawing form input{
-  display: flex;
-}
+
 .add-drawing form .checkbox-container .top{
   display: flex;
   gap: 10px;
@@ -763,6 +888,7 @@ header nav ul li .nav-link.active{
   justify-content: start;
   align-items: center;
 }
+
 /* DProductColorsSelector */
 .add-drawing .dproduct-colors-selector{
 display: none;
@@ -775,13 +901,16 @@ display: none;
   flex-direction: row;
   gap: 20px;
   justify-content: space-between;
-  width: 80%;
+  width: 90%;
   margin-top: 10px;
   padding-left: 20px;
   
 }
 
 
+.add-drawing .dproduct-colors-selector .checkboxes .ages-colors h4{
+  margin-bottom: 10px;
+}
 
 .add-drawing .dproduct-colors-selector .checkboxes .checkbox{
   display: flex;
@@ -789,7 +918,9 @@ display: none;
   gap: 5px;
   font-size: 15px;
 }
-
+.add-drawing .dproduct-colors-selector .checkboxes .checkbox input:hover, .add-drawing .dproduct-colors-selector .checkboxes .checkbox label:hover, .add-drawing .dproduct-colors-selector .checkboxes .checkbox .color-div:hover{
+  cursor: pointer;
+}
 
 .add-drawing .dproduct-colors-selector .checkboxes .color-div{
   width: 20px;
@@ -897,6 +1028,173 @@ display: none;
   font-size: 0.8rem;
   color: #475569;
 
+}
+
+
+/* ChangePS */
+/* Overlay oscuro de fondo */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Tarjeta del modal */
+.modal-card {
+  position: relative;
+  background-color: #ffffff;
+  width: 90%;
+  max-width: 440px;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: scaleUp 0.2s ease-out;
+}
+
+/* Botón cerrar X */
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.modal-close-btn:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+/* Encabezado */
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.modal-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Cuerpo del modal */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.status-info-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.status-label {
+  font-size: 0.875rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.paid {
+  background-color: #8fa58a;
+  color: #ffffff;
+}
+
+.status-badge.unpaid {
+  background-color: #c98c87;
+  color: #ffffff;
+}
+
+.modal-description {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: #374151;
+}
+
+/* Botones del pie */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: 1px solid transparent;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark-color);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 /* Responsive */ 
 

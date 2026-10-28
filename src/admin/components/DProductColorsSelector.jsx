@@ -1,45 +1,84 @@
 
 import { MdExpandMore } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
-import { readColors } from "../../supabase/functions"
+import { readColors, readAgesColors } from "../../supabase/functions"
 import { Context } from "../../Context/Context";
-const DProductColorsSelector = ({ product, open}) => {
-    const { selectedDPColors, setSelectedDPColors} = useContext(Context)
-    const [colors, setColors] = useState([])
-
+const DProductColorsSelector = ({ product, open }) => {
+    const { selectedDPAgesColors, setSelectedDPAgesColors } = useContext(Context)
+    // const [colors, setColors] = useState([])
+    const [agesColors, setAgesColors] = useState([])
     useEffect(() => {
-        readColors(setColors, product.id)
-        setSelectedDPColors((prev)=>{
-            if(prev.find(obj => obj.productId == product.id)) return prev
-            else return [...prev, {productId: product.id, selectedColors: []}]
-        
+        // readColors(setColors, product.id)
+        readAgesColors(setAgesColors, product.id)
+        setSelectedDPAgesColors((prev) => {
+            if (prev.find(obj => obj.productId == product.id)) return prev
+            else return [...prev, { productId: product.id, selectedAgesColors: [] }]
+
         })
     }, [])
 
-    const handleCheck = (id, name, hex) => {
-        setSelectedDPColors((prev) =>{        
-        return prev.map(obj => {
-            if(obj.productId == product.id){
-                return {
-                    productId: product.id,
-                    selectedColors: obj.selectedColors.find(color=>color.id == id) ? obj.selectedColors.filter(color=>color.id !== id) : [...obj.selectedColors, {id, name, hex}]
+    const handleCheck = (ageId, color) => {
+        setSelectedDPAgesColors((prev) => {
+            return prev.map(obj => {
+                if (obj.productId !== product.id) return obj;
+                const currentAges= obj.selectedAgesColors || []
+                const existingAge = currentAges.find((a)=>a.ageId === ageId)
+                let updatedAges
+                if(existingAge){
+                    const hasColor = existingAge.colors.some((c)=>c.id === color.id)
+                    const updatedColors = hasColor ? existingAge.colors.filter((c)=>c.id !== color.id)
+                    :[...existingAge.colors, color]
+                    if(updatedColors.length === 0){
+                        updatedAges = currentAges.filter((a)=>a.ageId !== ageId)
+                    }else{
+                        updatedAges= currentAges.map((a)=>a.ageId ===ageId ? {...a, colors: updatedColors}:a)
+                    }
+                }else{
+                    updatedAges=[
+                        ...currentAges,
+                        {ageId: ageId,
+                        colors:[{id:color.id, name: color.name, hex:color.hex}]}
+                    ]
                 }
-            }
-            return obj 
-        })
+                return{
+                    ...obj,
+                    selectedAgesColors:updatedAges
+                }
+            })
         }
         )
     }
+    const isChecked = (ageId, colorId) =>{
+        const productState = selectedDPAgesColors.find((obj)=>obj.productId === product.id)
+        if(!productState || !productState.selectedAgesColors) return false
+        const ageObj = productState.selectedAgesColors.find((a)=>a.ageId === ageId)
+        return ageObj ? ageObj.colors.some((c)=>c.id ===colorId):false
+    }
+
     return <>
         <div className={open ? "dproduct-colors-selector open" : "dproduct-colors-selector"}>
             <div className={open ? "checkboxes open" : "checkboxes"}>
-                {colors && colors.map((color, i) => {
+                {agesColors && agesColors?.map((age, i) => {
+                    return <div className="ages-colors" key={i}>
+                        <h4>{age.name}</h4>
+                        {age.colors.map((color, j) => {
+                            return <div key={j} className="checkbox">
+                                 <input type="checkbox" name={color?.name} id={color.PACId} onChange={() => handleCheck(age.id,color)} checked={isChecked(age.id, color.id)} />
+                                <label htmlFor={color.PACId}>{color.name}</label>
+                                <div className="color-div" style={{ backgroundColor: color.hex }}></div> 
+                            </div>
+
+                        })}
+
+                    </div>
+                })}
+                {/* {colors && colors.map((color, i) => {
                     return <div key={i} className="checkbox">
-                        <input type="checkbox" name={color?.name} id={color?.id} onChange={() => handleCheck(color.id, color.name, color.hex)} checked={selectedDPColors.find(obj=>obj.productId == product.id)?.selectedColors.some(col => col.id === color.id)} />
+                        <input type="checkbox" name={color?.name} id={color?.id} onChange={() => handleCheck(color.id, color.name, color.hex)} checked={selectedDPAgesColors.find(obj=>obj.productId == product.id)?.selectedColors.some(col => col.id === color.id)} />
                         <label htmlFor={color.id}>{color.name}</label>
                         <div className="color-div" style={{ backgroundColor: color.hex }}></div>
                     </div>
-                })}
+                })} */}
 
             </div>
         </div>

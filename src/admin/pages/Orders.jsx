@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react"
 import { selectOrders } from "../../supabase/functions"
+import ChangePS from "../components/ChangePS"
 import React from "react"
 const Orders = () => {
     const [orders, setOrders] = useState(null)
     const [open, setOpen] = useState(null)
+    const [selectedOrder, setSelectedOrder] = useState(null)
     useEffect(() => {
         selectOrders(setOrders)
     }, [])
     const handleRowClick = (id) => {
-        if (open) setOpen(null)
-        setOpen(id)
+        console.log(open, id)
+        if (open == id) setOpen(false)
+        else setOpen(id)
+    }
+    const handlePSClick =(e, order)=>{
+        e.stopPropagation()
+        setSelectedOrder(order)
+
     }
     return <div className="orders">
+        {selectedOrder && <ChangePS selectedOrder={selectedOrder}  setSelectedOrder={setSelectedOrder} setOrders={setOrders}/>}
         <h2>Pedidos</h2>
         <div className="orders-table">
             <div className="grid-header">
@@ -37,7 +46,7 @@ const Orders = () => {
                         <div>{order.address}</div>
                         <div>{order.total_price}€</div>
                         <div>{order.order_status}</div>
-                        <div style={{backgroundColor: order.payment_status == 'ordaindu gabe' ? '#c98c87':order.payment_status == 'ordainduta' ? '#8fa58a': 'transparent'}}>{order.payment_status}</div>
+                        <div onClick={(e)=>handlePSClick(e, order)} style={{backgroundColor: order.payment_status == 'ordaindu gabe' ? '#c98c87':order.payment_status == 'ordainduta' ? '#8fa58a': 'transparent'}}>{order.payment_status}</div>
                         <div>{order.created_at}</div>
                     </div>
 

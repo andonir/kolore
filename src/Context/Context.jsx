@@ -11,7 +11,7 @@ export const ContextProvider = (props) => {
 
 const [DBData, setDBData] = useState(null)
 const [selectedProducts, setSelectedProducts] = useState([])
-const [selectedDPColors, setSelectedDPColors] = useState([])
+const [selectedDPAgesColors, setSelectedDPAgesColors] = useState([])
 
 const [showAdminNav, setShowAdminNav] = useState(false)
 const [showCheckoutModal, setShowCheckoutModal] = useState(false)
@@ -50,8 +50,8 @@ useEffect(() => {
         totalPrice,
         setTotalPrice,
         session, loading,
-        selectedDPColors, 
-        setSelectedDPColors,
+        selectedDPAgesColors, 
+        setSelectedDPAgesColors,
         DBData,
         setDBData,
         showAdminNav,
